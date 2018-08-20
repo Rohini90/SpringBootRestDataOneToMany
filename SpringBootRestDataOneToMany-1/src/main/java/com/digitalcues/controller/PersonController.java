@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.digitalcues.model.Person;
 import com.digitalcues.repository.PersonRepository;
+import com.digitalcues.service.PersonService;
 
 @RestController
 @RequestMapping("/person")
@@ -20,7 +21,7 @@ public class PersonController {
 
 	@Autowired
 	
-	private PersonRepository personRepository;
+	private PersonService personService;
 	
 	
 	@PostMapping("/persons")
@@ -29,7 +30,7 @@ public class PersonController {
 		person.setUpdatedOn(new Date());
 		
 		try {
-		personRepository.save(person);
+		personService.save(person);
 		return "dPersonDetails saved successfully With Id::"+person.getPersonId();
 		}catch(Exception e) {
 			e.printStackTrace();
