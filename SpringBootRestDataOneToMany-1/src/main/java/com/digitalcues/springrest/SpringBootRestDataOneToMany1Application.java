@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 @SpringBootApplication
-@ComponentScan({"com.digitalcues.controller","com.digitalcues.model"})
+@ComponentScan({"com.digitalcues.controller","com.digitalcues.model","com.digitalcues.service"})
 @EnableMongoRepositories("com.digitalcues.repository")
 public class SpringBootRestDataOneToMany1Application {
 
