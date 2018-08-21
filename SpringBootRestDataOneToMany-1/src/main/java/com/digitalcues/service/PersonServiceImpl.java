@@ -1,5 +1,9 @@
 package com.digitalcues.service;
 
+//<<<<<<< HEAD
+//=======
+import java.util.Date;
+//>>>>>>> f29102752640cb56d2c27ea7f158d3ca8e257f9b
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +22,9 @@ public class PersonServiceImpl  implements PersonService{
 
 	@Override
 	public void save(Person person) {
+		
+		person.setCreatedOn(new Date());
+		person.setUpdatedOn(new Date());
 		personRepository.save(person);
 	}
 	
@@ -31,5 +38,34 @@ public class PersonServiceImpl  implements PersonService{
 	}
 
 
+/*
+	@Override
+	public void updatePersonDetails(Person person,String id) {
+		Optional<Person> personObj = personRepository.findById(id);
+		Person updatedPersonObj = personObj.get();
+		updatedPersonObj.setFirstName(person.getFirstName());
+		updatedPersonObj.setLastName(person.getLastName());
+		updatedPersonObj.setFirstName(person.getFirstName());
+		updatedPersonObj.setEmail(person.getEmail());
+		updatedPersonObj.setUserName(person.getUserName());
+		updatedPersonObj.setPassword(person.getPassword());
+		updatedPersonObj.setFirstName(person.getFirstName());
+		updatedPersonObj.setJoiningDate(person.getJoiningDate());
+		updatedPersonObj.setUpdatedOn(new Date());
+		updatedPersonObj.setAddress(person.getAddress());
+		personRepository.save(updatedPersonObj);
+			
+	}
+
+	@Override
+	public Person getPersonDetails(String id) {
+		Optional<Person> personObj = personRepository.findById(id);
+		Person person = personObj.get();
+		
+		return person;
+	}
+
+	
+	*/
 
 }
