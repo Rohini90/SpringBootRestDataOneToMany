@@ -8,6 +8,7 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,16 +26,15 @@ import com.digitalcues.service.PersonService;
 public class PersonController {
 
 	@Autowired
+	public PersonService personService;
 	
-	private PersonService personService;
 	
-	
-/*	@GetMapping("/{id}")
+	@GetMapping("/{id}")
 	public Person getPersonDetails(@PathVariable String id) {
 		Person person=personService.getPersonDetails(id);
 		return person;
 	}
-	*/
+	
 	
 	@PostMapping
 	public String savePersonDetails(@Valid @RequestBody Person person) {
@@ -47,16 +47,12 @@ public class PersonController {
 			e.printStackTrace();
 			
 		}
-//<<<<<<< HEAD
+
 		return null;
-	//}
-//=======
-		//return "Error:Details not saved";
 	}
-//>>>>>>> f29102752640cb56d2c27ea7f158d3ca8e257f9b
-	//Delete a person
+
 		
-		@RequestMapping(method=RequestMethod.DELETE,value="/delete/{id}") 
+		@DeleteMapping("/{id}") 
 		String deletePerson(@PathVariable String id)
 		{
 			try {
@@ -65,10 +61,10 @@ public class PersonController {
 			}catch(Exception e){
 				e.printStackTrace();
 			}
-			return"one person is deleted with id"+id;
+			return" person details  with id"+id+"deleted successfully!!!!!";
 		}
 		
-/*	}
+	
 	
 	@PutMapping("/{id}")
 	public String updatePersonDetails(@Valid @RequestBody Person person ,@PathVariable String id) {
@@ -77,13 +73,11 @@ public class PersonController {
 		
 	}
 	
-<<<<<<< HEAD
-
-=======
+   
 	
-	*/
+	
 	
 	
 	
 }
-//>>>>>>> f29102752640cb56d2c27ea7f158d3ca8e257f9b
+
