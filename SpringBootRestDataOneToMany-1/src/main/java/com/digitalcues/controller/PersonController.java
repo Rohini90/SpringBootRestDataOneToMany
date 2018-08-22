@@ -1,13 +1,18 @@
 package com.digitalcues.controller;
 
+import java.net.URI;
 import java.util.Date;
 import java.util.Optional;
-
-//>>>>>>> f29102752640cb56d2c27ea7f158d3ca8e257f9b
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.MethodParameter;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,8 +20,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.digitalcues.model.Person;
 import com.digitalcues.service.PersonService;
@@ -27,57 +33,49 @@ public class PersonController {
 
 	@Autowired
 	public PersonService personService;
-	
-	
+
 	@GetMapping("/{id}")
 	public Person getPersonDetails(@PathVariable String id) {
-		Person person=personService.getPersonDetails(id);
+		Person person = personService.getPersonDetails(id);
+
 		return person;
 	}
-	
-	
+
 	@PostMapping
-	public String savePersonDetails(@Valid @RequestBody Person person) {
-		
-		
-		try {
-		personService.save(person);
-		return "PersonDetails saved successfully With Id::"+person.getPersonId();
-		}catch(Exception e) {
-			e.printStackTrace();
-			
-		}
+	public ResponseEntity<Object> savePersonDetails(@Valid @RequestBody Person person) {
 
-		return null;
+		Person savedPerson = personService.save(person);
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(savedPerson.getPersonId()).toUri();
+
+		return ResponseEntity.created(location).build();
+
 	}
 
+	@DeleteMapping("/{id}")
+	public String deletePerson(@PathVariable String id) {
 		
-		@DeleteMapping("/{id}") 
-		String deletePerson(@PathVariable String id)
-		{
-			try {
-				personService.delete(id);
-				
-			}catch(Exception e){
-				e.printStackTrace();
-			}
-			return" person details  with id"+id+"deleted successfully!!!!!";
-		}
+			personService.delete(id);
+
 		
-	
-	
+		return " person details  with id" + id + "deleted successfully!!!!!";
+	}
+
+	/*
+	 * @PutMapping("/{id}") public String updatePersonDetails(@Valid @RequestBody
+	 * Person person ,@PathVariable String id) {
+	 * personService.updatePersonDetails(person,id); return
+	 * "Person Details Updated SuccessFully!!!";
+	 * 
+	 * }
+	 */
 	@PutMapping("/{id}")
-	public String updatePersonDetails(@Valid @RequestBody Person person ,@PathVariable String id) {
-		personService.updatePersonDetails(person,id);
-		return "Person Details Updated SuccessFully!!!";
-		
-	}
-	
-   
-	
-	
-	
-	
-	
-}
+	public ResponseEntity<?> updatePersonDetails(@Valid @RequestBody Person person, @PathVariable String id) {
 
+		personService.updatePersonDetails(person, id);
+
+		return ResponseEntity.status(HttpStatus.OK).body("Person details updated sucessfully!!");
+
+	}
+
+}
