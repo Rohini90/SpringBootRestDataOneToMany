@@ -2,6 +2,7 @@ package com.digitalcues.service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,12 @@ public class PersonServiceImpl  implements PersonService{
 	public PersonRepository personRepository;
 
 	@Override
-	public void save(Person person) {
+	public Person save(Person person) {
 
 		person.setCreatedOn(formatDate());
 		person.setUpdatedOn(formatDate());
 		
-		personRepository.save(person);
+		return personRepository.save(person);
 	}
 	
      @Override
@@ -69,6 +70,30 @@ public class PersonServiceImpl  implements PersonService{
 		String str = formDate.format(date);
 		return str;
 
+	}
+
+	@Override
+	public boolean findByEmail(String email) {
+		List <Person> list=personRepository.findAll();
+		for(Person person:list)
+		{
+			if(person.getEmail().equals(email)){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean findByUserName(String userName) {
+		List<Person> list=personRepository.findAll();
+		for(Person person:list)
+		{
+			if(person.getUserName().equals(userName)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	/*public Date parseDate(Date date) {

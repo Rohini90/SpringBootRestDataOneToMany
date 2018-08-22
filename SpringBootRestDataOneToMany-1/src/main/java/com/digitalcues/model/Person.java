@@ -36,10 +36,12 @@ public class Person {
 	private String lastName;
 	
 	@Email
+	@UniqueEmail(message="email is already exist")
 	private String email;
 	
 	@Size(min=6,message="Username must be at least 6 char length ")
 	
+	@UniqueUser
 	private String userName;
 	
 	@Pattern(regexp="^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$",message="password must be Minimum eight characters, at least one letter, one number and one special character:")
