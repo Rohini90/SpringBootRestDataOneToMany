@@ -1,15 +1,12 @@
 package com.digitalcues.service;
 
-//<<<<<<< HEAD
-//=======
+import java.text.SimpleDateFormat;
 import java.util.Date;
-//>>>>>>> f29102752640cb56d2c27ea7f158d3ca8e257f9b
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.digitalcues.model.Person;
 import com.digitalcues.repository.PersonRepository;
@@ -18,13 +15,14 @@ import com.digitalcues.repository.PersonRepository;
 @Transactional
 public class PersonServiceImpl  implements PersonService{
 	@Autowired
-	private PersonRepository personRepository;
+	public PersonRepository personRepository;
 
 	@Override
 	public void save(Person person) {
+
+		person.setCreatedOn(formatDate());
+		person.setUpdatedOn(formatDate());
 		
-		person.setCreatedOn(new Date());
-		person.setUpdatedOn(new Date());
 		personRepository.save(person);
 	}
 	
@@ -38,7 +36,7 @@ public class PersonServiceImpl  implements PersonService{
 	}
 
 
-/*
+
 	@Override
 	public void updatePersonDetails(Person person,String id) {
 		Optional<Person> personObj = personRepository.findById(id);
@@ -51,7 +49,7 @@ public class PersonServiceImpl  implements PersonService{
 		updatedPersonObj.setPassword(person.getPassword());
 		updatedPersonObj.setFirstName(person.getFirstName());
 		updatedPersonObj.setJoiningDate(person.getJoiningDate());
-		updatedPersonObj.setUpdatedOn(new Date());
+		updatedPersonObj.setUpdatedOn(formatDate());
 		updatedPersonObj.setAddress(person.getAddress());
 		personRepository.save(updatedPersonObj);
 			
@@ -65,7 +63,31 @@ public class PersonServiceImpl  implements PersonService{
 		return person;
 	}
 
+	public String formatDate() {
+		Date date = new Date();
+		SimpleDateFormat formDate = new SimpleDateFormat("dd-mm-yyyy HH:mm:ss");
+		String str = formDate.format(date);
+		return str;
+
+	}
 	
-	*/
+	/*public Date parseDate(Date date) {
+		SimpleDateFormat sm = new SimpleDateFormat("dd-mm-yyyy");
+	    // myDate is the java.util.Date in yyyy-mm-dd format
+	    // Converting it into String using formatter
+	    String strDate = sm.format(date);
+	    //Converting the String back to java.util.Date
+	    
+	    try {
+			 Date date1= sm.parse(strDate);
+			 return date1;
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return date;
+		}*/
+	  
+
 
 }

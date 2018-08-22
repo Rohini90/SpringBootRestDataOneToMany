@@ -47,19 +47,12 @@ public class Person {
 	
 	private Date joiningDate;
 	
-	private Date createdOn;
+	private String createdOn;
 	
-	private Date updatedOn;
+	private String updatedOn;
 	
 	@OneToMany(mappedBy="person", cascade=CascadeType.ALL )
 	private List<Address> address;
-	
-	
-	
-
-
-
-
 
 	public Person(String firstName, String lastName, @Email(message = "Email Id already exists") String email,
 			@Size(min = 6, message = "Username must be at least 6 char length ") String userName,
@@ -145,23 +138,20 @@ public class Person {
 		this.joiningDate = joiningDate;
 	}
 
-
-	public Date getCreatedOn() {
+	public String getCreatedOn() {
 		return createdOn;
 	}
 
-
-	public void setCreatedOn(Date createdOn) {
+	public void setCreatedOn(String createdOn) {
 		this.createdOn = createdOn;
 	}
 
-
-	public Date getUpdatedOn() {
+	public String getUpdatedOn() {
 		return updatedOn;
 	}
 
 
-	public void setUpdatedOn(Date updatedOn) {
+	public void setUpdatedOn(String updatedOn) {
 		this.updatedOn = updatedOn;
 	}
 
