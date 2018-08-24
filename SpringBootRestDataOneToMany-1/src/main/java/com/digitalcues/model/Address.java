@@ -38,6 +38,28 @@ public class Address {
 		this.zip = zip;
 		this.person = person;
 	}
+	
+	
+
+	public Address( String addressType, String streetAddress, String city, String state, String country,
+			int zip) {
+		super();
+		
+		this.addressType = addressType;
+		this.streetAddress = streetAddress;
+		this.city = city;
+		this.state = state;
+		this.country = country;
+		this.zip = zip;
+	}
+
+
+
+	public Address() {
+		
+	}
+
+
 
 	public String getId() {
 		return id;

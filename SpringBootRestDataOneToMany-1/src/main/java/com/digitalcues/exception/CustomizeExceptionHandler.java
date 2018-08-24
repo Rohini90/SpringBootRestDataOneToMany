@@ -5,7 +5,7 @@ import java.util.Date;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
+
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -31,23 +31,28 @@ public class CustomizeExceptionHandler extends ResponseEntityExceptionHandler {
 	    return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
 	  }
 	
-	  @ResponseStatus(HttpStatus.BAD_REQUEST)
+	/*  @ResponseStatus(HttpStatus.BAD_REQUEST)
 	  @ExceptionHandler(MethodArgumentNotValidException.class)
-	  @Override
-	  protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-	      HttpHeaders headers, HttpStatus status, WebRequest request) {
-	    ExceptionResponse exceptionResponse = new ExceptionResponse("Validation Failed ::invalid input",
-	        ex.getMessage());
-	    return new ResponseEntity<Object>(exceptionResponse, HttpStatus.BAD_REQUEST);
-	  } 
-	  /*@ExceptionHandler(MethodArgumentNotValidException.class)
-	    public ResponseEntity<ExceptionResponse> invalidInput(MethodArgumentNotValidException ex) {
+	    public ResponseEntity<ExceptionResponse> invalidInput(MethodArgumentNotValidException ex, WebRequest request) {
 	       
 	        ExceptionResponse response = new ExceptionResponse();
 	        response.setErrorCode("Validation Error");
 	        response.setErrorMessage(ex.getMessage());
 	       
 	        return new ResponseEntity<ExceptionResponse>(response, HttpStatus.BAD_REQUEST);
-	    }*/
+	    }
+	  */
 
+		
+		  @ExceptionHandler(MethodArgumentNotValidException.class)
+		  @ResponseStatus(HttpStatus.BAD_REQUEST)
+		  protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+		      HttpHeaders headers, HttpStatus status, WebRequest request) {
+		    ExceptionResponse exceptionResponse = new ExceptionResponse("Validation Failed ::invalid input",
+		        ex.getMessage());
+		    return new ResponseEntity<Object>(exceptionResponse, HttpStatus.BAD_REQUEST);
+		  } 
+       
+	  
+	
 }
