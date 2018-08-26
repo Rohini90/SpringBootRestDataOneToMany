@@ -29,7 +29,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Person {
 	
 	@Id
-	private ObjectId personId;
+	private String personId;
 	
 	@NotBlank
 	private String firstName;
@@ -92,13 +92,13 @@ public class Person {
 
 	
 
-	public ObjectId getPersonId() {
+	public String getPersonId() {
 		return personId;
 	}
 
 
-	public void setPersonId(ObjectId personId) {
-		this.personId = personId;
+	public void setPersonId(String string) {
+		this.personId = string;
 	}
 
 
