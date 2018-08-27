@@ -8,20 +8,13 @@ import java.util.List;
 
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.OneToMany;
-import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
-
-import org.bson.types.ObjectId;
-
 import org.springframework.data.annotation.Id;
-
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
@@ -42,7 +35,7 @@ public class Person {
 	
 	@Size(min=6,message="Username must be at least 6 char length ")
 	
-	@UniqueUser
+	@UniqueUser(message="username is alraedy exist")
 	private String userName;
 	
 	@Pattern(regexp="^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$",message="password must be Minimum eight characters, at least one letter, one number and one special character:")
@@ -75,7 +68,7 @@ public class Person {
 		this.address = address;
 	}
 	
-	public Person(String firstName, String lastName, @Email(message = "Email Id already exists") String email,
+/*	public Person(String firstName, String lastName, @Email(message = "Email Id already exists") String email,
 			@Size(min = 6, message = "Username must be at least 6 char length ") String userName,
 			@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$", message = "password must be Minimum eight characters, at least one letter, one number and one special character:") String password,
 			Date joiningDate, ArrayList<Address> address) {
@@ -88,74 +81,78 @@ public class Person {
 		this.joiningDate = joiningDate;
 		this.address = address;
 	}
-
+*/
+	public Person(String personId, @NotBlank String firstName, @NotBlank String lastName, @Email(message = "Email Id already exists") String email,
+			@Size(min = 6, message = "Username must be at least 6 char length ") String userName,
+			@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$", message = "password must be Minimum eight characters, at least one letter, one number and one special character:") String password,
+			Date joiningDate, List<Address> address) {
+		super();
+		this.personId = personId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.userName = userName;
+		this.password = password;
+		this.joiningDate = joiningDate;
+		this.address = address;
+	}
 
 	
+
 
 	public String getPersonId() {
 		return personId;
 	}
 
+	
 
-	public void setPersonId(String string) {
-		this.personId = string;
+	public void setPersonId(String personId) {
+		this.personId = personId;
 	}
-
 
 	public String getFirstName() {
 		return firstName;
 	}
 
-
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
-
 
 	public String getLastName() {
 		return lastName;
 	}
 
-
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-
 
 	public String getEmail() {
 		return email;
 	}
 
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
 
 	public String getUserName() {
 		return userName;
 	}
 
-
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-
 
 	public String getPassword() {
 		return password;
 	}
 
-
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
-
 	public Date getJoiningDate() {
 		return joiningDate;
 	}
-
 
 	public void setJoiningDate(Date joiningDate) {
 		this.joiningDate = joiningDate;
@@ -173,23 +170,18 @@ public class Person {
 		return updatedOn;
 	}
 
-
 	public void setUpdatedOn(String updatedOn) {
 		this.updatedOn = updatedOn;
 	}
-
 
 	public List<Address> getAddress() {
 		return address;
 	}
 
-
 	public void setAddress(List<Address> address) {
 		this.address = address;
-		
 	}
 
-	
 	@Override
 	public String toString() {
 		return "Person [personId=" + personId + ", firstName=" + firstName + ", lastName=" + lastName + ", email="
@@ -197,9 +189,4 @@ public class Person {
 				+ ", createdOn=" + createdOn + ", updatedOn=" + updatedOn + ", address=" + address + "]";
 	}
 	
-	
-	
-	
-	
-
 }

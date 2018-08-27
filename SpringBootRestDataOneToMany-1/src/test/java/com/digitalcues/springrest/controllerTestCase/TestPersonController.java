@@ -1,8 +1,12 @@
 package com.digitalcues.springrest.controllerTestCase;
 
+import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 import static org.junit.Assert.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.assertj.core.util.Lists;
@@ -43,29 +47,44 @@ public class TestPersonController {
 		assertEquals("expected[" + exptPerson + "] and actrual [" + person + "]result differ", person, person);
 
 	}
-
+/*
     @Test	
-	public void testdeleteDetails()
+	public void testdeleteDetails() throws ParseException
 	{
-    	//Person person=personservice.getPersonDetails("5b7d4784d1c22b31ccd9a1d4");
-    	//String expected=personservice.delete("5b7d4892d1c22b1ba0b31ec7");
-    	Person person=personservice.getPersonDetails("5b7d49ecd1c22b39b08b25fb");
-    	personrepository.delete(person);
-    	//Person experson=personservice.getPersonDetails("5b7d49ecd1c22b39b08b25fb");
-    	assertEquals("delete operation falses", null, person);
-    	
+    	SimpleDateFormat sm = new SimpleDateFormat("dd-mm-yyyy");
+    	//Person newperson=new Person("555","pari","roy","spk2l@df.com","ffddg342","fppfccvv#123",sm.parse("2017-09-06"), null, null, new ArrayList<Address>());
+    	Person person=personservice.getPersonDetails("5b82b77cd1c22b2624053bba");
+    	personrepository.delete(person);  	
+    	assertThatNullPointerException();
     	
     	
 	}
-
-/*	@Test
-	public void testSave()
+*/
+	/*
+     @Test
+	public void testSave() throws ParseException
 	{
-		
-		Person savedperson=new Person();
-		Person p= personservice.save(savedperson);
-		assertEquals("save operation", savedperson, p);
-		
+		//String date="2017-09-05";
+	     Person person=new Person();
+		SimpleDateFormat sm = new SimpleDateFormat("dd-mm-yyyy");
+		Person savedperson=new Person("pari","roy","spk2l@df.com","ffddg342","fppfccvv#123",sm.parse("2017-09-06"), new ArrayList<Address>());
+		personservice.save(savedperson);
+		Person newperson=personservice.getPersonDetails(savedperson.getPersonId());
+      //		assertEquals("save operation is not successful when expected is"+savedperson+"but  person is not found", savedperson, newperson);
+		//assertSame(savedperson, newperson);
+		System.out.println(newperson);
+		System.out.println(savedperson);
+		assertEquals("save operation is fail if object's values are not same", newperson, savedperson);
 	}
 	*/
+    @Test
+    public void testUpdate()
+    {
+    	Person person=personservice.getPersonDetails("5b82c503d1c22b33f43625f3");
+    	person.setLastName("bhatt");
+    	personservice.updatePersonDetails(person, "5b82c503d1c22b33f43625f3");
+    	Person newperson=personservice.getPersonDetails("5b82c503d1c22b33f43625f3");
+    	assertNotSame("update operation is not work", person, newperson);
+    	
+    }
 }
