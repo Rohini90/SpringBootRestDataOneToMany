@@ -1,16 +1,26 @@
 package com.digitalcues.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -34,6 +44,8 @@ public class PersonController {
 
 	@Autowired
 	public PersonService personService;
+	 
+
 	
 	public static final Logger log = LoggerFactory.getLogger(PersonController.class);
 
@@ -93,10 +105,71 @@ public ResponseEntity<?> savePersonDetails(@Valid @RequestBody Person person )  
 	
 	@GetMapping("/import")
 	public ResponseEntity<List<Person>> findAllPersons() {
-		List<Person>persons= personService.findAll();
+		List<Person>persons= personService.readFromCsv();
+		
 		return new ResponseEntity<List<Person>>(persons,HttpStatus.OK);
 		
 	}
 	
+	@GetMapping("/export")
+	public ResponseEntity<Resource> MongoToCsv() throws FileNotFoundException {
+		List<String[]>data= personService.writeToCsv();
+		
+    File file= new File("E:/csv/export1.csv");
+    InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+
+    return ResponseEntity.ok()
+            
+            .contentLength(file.length())
+            .contentType(MediaType.parseMediaType("application/octet-stream"))
+            .body(resource);
+		
+		
+	}
+	
+	@GetMapping("/download")
+	public ResponseEntity<Resource> download() throws IOException {
+
+	    // ...
+         File file= new File("E:/csv/export.csv");
+	    InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
+
+	    return ResponseEntity.ok()
+	            
+	            .contentLength(file.length())
+	            .contentType(MediaType.parseMediaType("application/octet-stream"))
+	            .body(resource);
+	}
+	/*
+	@GetMapping("/export")
+	 public void downloadCsv() throws IOException {
+		 
+		         String csvFilePath = "";
+		 
+		         log.info("Downloading A .CSV File From The Server ....!");
+		 
+		  
+		 
+		         /**** Get The Absolute Path Of The File 
+		 
+		              
+	
+		         log.info("Absolute Path Of The .CSV File Is?= " + csvFilePath);
+		 
+		  
+		     File downloadFile = new File(csvFilePath);
+		 
+		         if(downloadFile.exists()) {
+		 
+		             Util.downloadFileProperties(req, resp, csvFilePath, downloadFile);
+		 
+		         } else {
+		 
+		             log.info("Requested .CSV File Not Found At The Server ....!");
+		 
+		         }
+		 
+		     }*/
+
 
 }

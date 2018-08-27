@@ -12,7 +12,7 @@ public interface PersonService {
 
 	public boolean findByEmail(String email);
 
-	 public List<Person> findAll();
+	 public List<Person> readFromCsv();
 
 
 	public boolean findByUserName(String userName);
@@ -25,6 +25,8 @@ public interface PersonService {
 	public void updatePersonDetails(Person person, String id);
 
 	public Person getPersonDetails(String id);
+	
+	public List<String[]> writeToCsv();
     
 
 	

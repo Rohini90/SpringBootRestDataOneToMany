@@ -25,10 +25,12 @@ public class CustomizeExceptionHandler extends ResponseEntityExceptionHandler {
 	  }
 
 	  @ExceptionHandler(PersonNotFoundException.class)
-	  public final ResponseEntity<ErrorDetails> handleUserNotFoundException(PersonNotFoundException ex, WebRequest request) {
-	    ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(),
-	        request.getDescription(false));
-	    return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+	  public final ResponseEntity<?> handleUserNotFoundException(PersonNotFoundException ex, WebRequest request) {
+	    ErrorDetails errorDetails = new ErrorDetails( ex.getMessage(),
+	        "invalid id");
+	   
+	    
+	    return new ResponseEntity<ErrorDetails>(errorDetails, HttpStatus.OK);
 	  }
 	
 	/*  @ResponseStatus(HttpStatus.BAD_REQUEST)

@@ -3,6 +3,7 @@ package com.digitalcues.service;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
@@ -30,6 +31,7 @@ import com.digitalcues.model.Employee;
 import com.digitalcues.model.Person;
 import com.digitalcues.repository.PersonRepository;
 import com.opencsv.CSVReader;
+import com.opencsv.CSVWriter;
 
 @Service
 @Transactional
@@ -38,17 +40,20 @@ public class PersonServiceImpl implements PersonService {
 	public PersonRepository personRepository;
 	private final ArrayList<Person> persons;
 	List<Person> list;
+	List<String[]> data;
 
 	public PersonServiceImpl() {
 		persons = new ArrayList<>();
 		list = new ArrayList<>();
+		data = new ArrayList<>();
+
 	}
 
 	@Override
 	public Person save(Person person) {
 
-		person.setCreatedOn(formatDate());
-		person.setUpdatedOn(formatDate());
+		person.setCreatedOn(formatDate(new Date()));
+		person.setUpdatedOn(formatDate(new Date()));
 
 		return personRepository.save(person);
 	}
@@ -72,7 +77,7 @@ public class PersonServiceImpl implements PersonService {
 		personObj.setPassword(person.getPassword());
 		personObj.setFirstName(person.getFirstName());
 		personObj.setJoiningDate(person.getJoiningDate());
-		personObj.setUpdatedOn(formatDate());
+		personObj.setUpdatedOn(formatDate(new Date()));
 		personObj.setAddress(person.getAddress());
 		personRepository.save(personObj);
 
@@ -100,8 +105,8 @@ public class PersonServiceImpl implements PersonService {
 		return resource;
 	}
 
-	public String formatDate() {
-		Date date = new Date();
+	public String formatDate(Date date) {
+
 		SimpleDateFormat formDate = new SimpleDateFormat("dd-mm-yyyy HH:mm:ss");
 		String str = formDate.format(date);
 		return str;
@@ -132,7 +137,7 @@ public class PersonServiceImpl implements PersonService {
 	}
 
 	@SuppressWarnings("resource")
-	public List<Person> findAll() {
+	public List<Person> readFromCsv() {
 
 		FileInputStream fis = null;
 
@@ -151,14 +156,13 @@ public class PersonServiceImpl implements PersonService {
 						parseDate(nextLine[5]),
 						new ArrayList<>(Arrays.asList(stringToObject(nextLine[6]), stringToObject(nextLine[7]))));
 
-				
-				person.setCreatedOn(formatDate());
-				person.setUpdatedOn(formatDate());
+				person.setCreatedOn(formatDate(new Date()));
+				person.setUpdatedOn(formatDate(new Date()));
 				persons.add(person);
 				for (Person person1 : persons) {
 					save(person1);
 				}
-				//list = personRepository.findAll();
+				list = personRepository.findAll();
 			}
 
 		} catch (FileNotFoundException ex) {
@@ -175,8 +179,77 @@ public class PersonServiceImpl implements PersonService {
 			}
 		}
 
-		return persons;
+		return list;
 	}
+
+	@SuppressWarnings("resource")
+	public List<String[]> writeToCsv() {
+
+		try {
+
+			String fileName = "E:/csv/export1.csv";
+
+			FileWriter writer = new FileWriter(fileName);
+
+			CSVWriter csvWriter = new CSVWriter(writer);
+
+			List<Person> persons = personRepository.findAll();
+			List<String[]> data = toStringArray(persons);
+			csvWriter.writeAll(data);
+
+			csvWriter.close();
+
+		} catch (FileNotFoundException ex) {
+			Logger.getLogger(PersonServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (IOException ex) {
+			Logger.getLogger(PersonServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+		}
+
+		return data;
+	}
+
+	public List<String[]> toStringArray(List<Person> persons) {
+		List<String[]> records = new ArrayList<>();
+
+		// adding header record
+		records.add(new String[] { "FNAME", "LName", "EMAIL", "USERNAME", "PASSWORD", "JOININGDATE","LOCAL ADDRESS","PERMANANT ADDRESS"});
+		Iterator<Person> it = persons.iterator();
+		while (it.hasNext()) {
+			Person person = it.next();
+			Address local= getLocalAddressDetails(person.getAddress());
+			Address permanant = getPermanantAddressDetails(person.getAddress());
+			records.add(new String[] { person.getFirstName(), person.getLastName(), person.getEmail(),
+					person.getUserName(), person.getPassword(), formatDate(person.getJoiningDate()),ObjectToString(local),ObjectToString(permanant) });
+		}
+		System.out.println(records);
+		return records;
+
+	}
+	 public Address getLocalAddressDetails(List<Address> address) {
+		 Iterator<Address> it = address.iterator();
+			
+				Address local = it.next();
+			
+			return local;
+	 }
+	 public Address getPermanantAddressDetails(List<Address> address) {
+		 Iterator<Address> it = address.iterator();
+		 Address permanant = null;
+			while(it.hasNext()) {
+				 permanant = it.next();
+			}
+			return permanant;
+	 }
+	public String ObjectToString(Address address) {
+		
+		
+		 return (address.getAddressType()+","+address.getStreetAddress()+","+address.getCity()+","+address.getState()+","+address.getCountry()+","+String.valueOf(address.getZip()));
+		 
+		}
+		
+		
+		
+	
 
 	/*
 	 * 
@@ -187,9 +260,9 @@ public class PersonServiceImpl implements PersonService {
 	 * 
 	 * try {
 	 * 
-	 * // String fileName = "src/main/resources/person.csv";
-	 * fis = new FileInputStream(new File(fileName)); CSVReader reader = new
-	 * CSVReader(new InputStreamReader(fis)); String[] nextLine; reader.readNext();
+	 * // String fileName = "src/main/resources/person.csv"; fis = new
+	 * FileInputStream(new File(fileName)); CSVReader reader = new CSVReader(new
+	 * InputStreamReader(fis)); String[] nextLine; reader.readNext();
 	 * 
 	 * while ((nextLine = reader.readNext()) != null) {
 	 * 
@@ -201,7 +274,9 @@ public class PersonServiceImpl implements PersonService {
 	 * ex); } catch (IOException ex) {
 	 * Logger.getLogger(PersonServiceImpl.class.getName()).log(Level.SEVERE, null,
 	 * ex); } finally { try { if (fis != null) { fis.close(); } } catch (IOException
-	 * ex) { Logger.getLogger(PersonServiceImpl.class.getName()).log(Level.SEVERE,null, ex); } }
+	 * ex) {
+	 * Logger.getLogger(PersonServiceImpl.class.getName()).log(Level.SEVERE,null,
+	 * ex); } }
 	 * 
 	 * return employees; } // C
 	 */
@@ -230,8 +305,6 @@ public class PersonServiceImpl implements PersonService {
 		add.setState(list.get(3));
 		add.setCountry(list.get(4));
 		add.setZip(Integer.valueOf(list.get(5)));
-		System.out.println(list);
-
 		return add;
 	}
 
