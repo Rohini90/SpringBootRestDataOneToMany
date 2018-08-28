@@ -1,8 +1,5 @@
 package com.digitalcues.model;
 
-
-
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,12 +27,12 @@ public class Person {
 	private String lastName;
 	
 	@Email
-	@UniqueEmail(message="email is already exist")
+	//@UniqueEmail(message="email is already exist")
 	private String email;
 	
 	@Size(min=6,message="Username must be at least 6 char length ")
 	
-	@UniqueUser(message="username is alraedy exist")
+	//@UniqueUser(message="username is alraedy exist")
 	private String userName;
 	
 	@Pattern(regexp="^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$",message="password must be Minimum eight characters, at least one letter, one number and one special character:")
@@ -68,20 +65,7 @@ public class Person {
 		this.address = address;
 	}
 	
-/*	public Person(String firstName, String lastName, @Email(message = "Email Id already exists") String email,
-			@Size(min = 6, message = "Username must be at least 6 char length ") String userName,
-			@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$", message = "password must be Minimum eight characters, at least one letter, one number and one special character:") String password,
-			Date joiningDate, ArrayList<Address> address) {
-		super();
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.email = email;
-		this.userName = userName;
-		this.password = password;
-		this.joiningDate = joiningDate;
-		this.address = address;
-	}
-*/
+
 	public Person(String personId, @NotBlank String firstName, @NotBlank String lastName, @Email(message = "Email Id already exists") String email,
 			@Size(min = 6, message = "Username must be at least 6 char length ") String userName,
 			@Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{8,}$", message = "password must be Minimum eight characters, at least one letter, one number and one special character:") String password,
@@ -187,6 +171,31 @@ public class Person {
 		return "Person [personId=" + personId + ", firstName=" + firstName + ", lastName=" + lastName + ", email="
 				+ email + ", userName=" + userName + ", password=" + password + ", joiningDate=" + joiningDate
 				+ ", createdOn=" + createdOn + ", updatedOn=" + updatedOn + ", address=" + address + "]";
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((personId == null) ? 0 : personId.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Person other = (Person) obj;
+		if (personId == null) {
+			if (other.personId != null)
+				return false;
+		} else if (!personId.equals(other.personId))
+			return false;
+		return true;
 	}
 	
 }
