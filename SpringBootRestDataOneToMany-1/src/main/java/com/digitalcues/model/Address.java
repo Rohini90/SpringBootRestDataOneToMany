@@ -1,15 +1,6 @@
 package com.digitalcues.model;
 
-import javax.persistence.ManyToOne;
-
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-@Document(collection="address")
 public class Address {
-	
-	@Id
-	private String id;
 	
 	private String addressType;
 	
@@ -23,12 +14,9 @@ public class Address {
 	
 	private int zip;
 	
-	@ManyToOne
 	
-	private Person person;
-
-	public Address(String addressType, String streetAddress, String city, String state, String country, int zip,
-			Person person) {
+	public Address(String addressType, String streetAddress, String city, String state, String country, int zip
+			) {
 		super();
 		this.addressType = addressType;
 		this.streetAddress = streetAddress;
@@ -36,22 +24,12 @@ public class Address {
 		this.state = state;
 		this.country = country;
 		this.zip = zip;
-		this.person = person;
-	}
-	
-	
-
-	public Address( String addressType, String streetAddress, String city, String state, String country,
-			int zip) {
-		super();
 		
-		this.addressType = addressType;
-		this.streetAddress = streetAddress;
-		this.city = city;
-		this.state = state;
-		this.country = country;
-		this.zip = zip;
 	}
+	
+	
+
+	
 
 
 
@@ -61,13 +39,7 @@ public class Address {
 
 
 
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
+	
 
 	public String getAddressType() {
 		return addressType;
@@ -117,18 +89,12 @@ public class Address {
 		this.zip = zip;
 	}
 
-	public Person getPerson() {
-		return person;
-	}
-
-	public void setPerson(Person person) {
-		this.person = person;
-	}
+	
 
 	@Override
 	public String toString() {
-		return "Address [id=" + id + ", addressType=" + addressType + ", streetAddress=" + streetAddress + ", city="
-				+ city + ", state=" + state + ", country=" + country + ", zip=" + zip + ", person=" + person + "]";
+		return "Address [ addressType=" + addressType + ", streetAddress=" + streetAddress + ", city="
+				+ city + ", state=" + state + ", country=" + country + ", zip=" + zip +"]";
 	}
 	
 	
