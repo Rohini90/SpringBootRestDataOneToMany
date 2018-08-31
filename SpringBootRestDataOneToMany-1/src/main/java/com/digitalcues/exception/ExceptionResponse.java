@@ -1,19 +1,28 @@
 package com.digitalcues.exception;
 
+import java.util.List;
+
 public class ExceptionResponse {
 	
 	 private String errorCode;
 	 private String errorMessage;
-	 
+	 private List<String> errors;
 	 public ExceptionResponse(){
 		 
 	 }
 	 
-	public ExceptionResponse(String errorCode, String errorMessage) {
+	
+
+
+
+	public ExceptionResponse(String errorCode, String errorMessage, List<String> errors) {
 		super();
 		this.errorCode = errorCode;
 		this.errorMessage = errorMessage;
+		this.errors = errors;
 	}
+
+
 
 
 
@@ -41,12 +50,22 @@ public class ExceptionResponse {
 
 
 
-	@Override
-	public String toString() {
-		return "ExceptionResponse [errorCode=" + errorCode + ", errorMessage=" + errorMessage + "]";
+	public List<String> getErrors() {
+		return errors;
 	}
-	
-	
+
+
+
+
+
+	public void setErrors(List<String> errors) {
+		this.errors = errors;
+	}
+
+
+
+
+
 	
 	 
 	 

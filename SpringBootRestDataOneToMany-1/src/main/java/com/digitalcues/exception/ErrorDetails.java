@@ -18,6 +18,12 @@ public class ErrorDetails {
 		this.details = details;
 	}
 
+    
+	public ErrorDetails(String message, String details) {
+		super();
+		this.message = message;
+		this.details = details;
+	}
 
 	public Date getTimestamp() {
 		return timestamp;
